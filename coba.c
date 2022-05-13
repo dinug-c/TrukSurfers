@@ -70,7 +70,7 @@ static void display(void)
 
 
     //drawStrokeChar(49,2,0,0);
-
+//
 
     glutSwapBuffers();
 }
