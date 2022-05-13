@@ -66,14 +66,7 @@ static void display(void)
         drawStrokeText2("Truck Surfer",-2,0,0);
     }
 
-    //glColor3d(1,1,0);
-	//drawStrokeText("Osama Hosam's OpenGL Tutorials",200,200,0);
-
-//	glRasterPos2i(100, 120);
-//    glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
-//    glutBitmapString(GLUT_BITMAP_HELVETICA_18, "text to render");
-
-    //drawBitmapText("Osama Hosam's OpenGL Tutorials",0,0,0);
+   
 
 
     //drawStrokeChar(49,2,0,0);
