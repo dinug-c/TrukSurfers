@@ -105,6 +105,47 @@ void Jalan(){
 	
 	glEnd();
 }
+void Pohon(){
+	glPushMatrix();
+    glRotated(360,0,1,0);
+    glTranslatef(0.0,0.0,0.0);
+    GLUquadricObj * pObj;
+    pObj = gluNewQuadric();
+    gluQuadricNormals(pObj,GLU_SMOOTH);
+	int ww = 1;
+	int qq = 1;
+			//batang
+            glPushMatrix();
+                glColor3ub(122,61,31);
+                glRotated(270,1,0,0);
+                glTranslatef(-40 + (ww*20),-40+(qq*20),0);
+                gluCylinder(pObj,1.5,0.5,8,25,25);
+            glPopMatrix();
+
+            //daun
+            glPushMatrix();
+                glColor3ub(25,148,19);
+                glScaled(2,2,2);
+                glRotated(90,0,1,0);
+                glTranslatef(-20 + (qq*10),6,-10+((ww-1)*10));
+                glutSolidDodecahedron();
+            glPopMatrix();
+            glPushMatrix();
+                glColor3ub(18,118,13);
+                glScaled(2,2,2);
+                glRotated(90,0,1,0);
+                glTranslatef(-20 + (qq*10),5,-9+((ww-1)*10));
+                glutSolidDodecahedron();
+            glPopMatrix();
+            glPushMatrix();
+                glColor3ub(30,130,25);
+                glScaled(2,2,2);
+                glRotated(90,0,1,0);
+                glTranslatef(-20 + (qq*10),5,-11+((ww-1)*10));
+                glutSolidDodecahedron();
+            glPopMatrix();
+    glPopMatrix();
+}
 void Truk() 
 { 
 	/* KEPALA */
@@ -1327,6 +1368,7 @@ void display() {
  	Jalan();
  	Truk(); 
  	Awan();
+ 	Pohon();
  } else if (screen == 1) { // screen 1 = homescreen
  	Home();
  } else { // screen 3 = gameover
