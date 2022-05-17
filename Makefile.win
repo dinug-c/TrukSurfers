@@ -4,8 +4,9 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = main.o
-LINKOBJ  = main.o
+RES      = Truk_Surfers_private.res
+OBJ      = main.o lib/Imageloader.o $(RES)
+LINKOBJ  = main.o lib/Imageloader.o $(RES)
 LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib" -L"C:/Program Files (x86)/Dev-Cpp/MinGW32/mingw32/lib" -static-libstdc++ -static-libgcc -mwindows -lglut32 -lglu32 -lopengl32 -lwinmm -lgdi32
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/mingw32/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include" -I"C:/Program Files (x86)/Dev-Cpp/MinGW32/lib/gcc/mingw32/4.8.1/include/c++"
@@ -26,3 +27,10 @@ $(BIN): $(OBJ)
 
 main.o: main.cpp
 	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+
+lib/Imageloader.o: lib/Imageloader.cpp
+	$(CPP) -c lib/Imageloader.cpp -o lib/Imageloader.o $(CXXFLAGS)
+
+Truk_Surfers_private.res: Truk_Surfers_private.rc 
+	$(WINDRES) -i Truk_Surfers_private.rc --input-format=rc -o Truk_Surfers_private.res -O coff 
+

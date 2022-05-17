@@ -5,13 +5,14 @@ Made by	: 	1. Agung Surya Permana
 			3. Resma Adi Nugroho
 			4. Ririn Indah Cahyani
 */
-
+#include <iostream> 
 #include <math.h> 
 #include <GL/glut.h> 
 #include <GL/glu.h>
 #include <stdio.h> 
 #include <string.h> 
 #include <stdlib.h> 
+#include "lib/imageloader.h"
 
 #define PHI 3.14159265358979323846 
 
@@ -21,6 +22,8 @@ float lx=0.0f,ly=0.0f,lz=-1.0f;
 int deltaMove = 0,h,w; 
 int bitmapHeight=12; 
 int screen = 1; // 1 = mainscreen, 2 = gamescreen, 3 = gameover
+GLuint _textureId;           //ID OpenGL untuk tekstur
+
 
 GLUquadricObj *quadObj; //parameter kuadratik silinder
 
@@ -701,12 +704,20 @@ void Truk()
 	
 	//Alas kanan
 	glPushMatrix();
+
+	glBindTexture(GL_TEXTURE_2D, _textureId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+ 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
 		glRotated(0,0,1,0);
 		glTranslatef(0,2.5,2);
 		glBegin(GL_QUADS);
+			glTexCoord2f(0.0f, 0.0f);
 			glVertex3f(0.75f,-1.5f,0.0f);
+			glTexCoord2f(1.0f, 0.0f);
 			glVertex3f(-7.5f,-1.5f,0.0f);
+			glTexCoord2f(1.0f, 1.0f);
 			glVertex3f(-7.5f,3.0f,0.0f);
+			glTexCoord2f(0.0f, 1.0f);
 			glVertex3f(0.75f,3.0f,0.0f);
 		glEnd();
 	glPopMatrix();
@@ -1426,14 +1437,26 @@ void releaseKey(int key, int x, int y) {
 const GLfloat light_ambient[] = { 0.5f, 0.5f, 0.5f, 0.0f }; 
 const GLfloat light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f }; 
 const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f }; 
-const GLfloat light_position[] = { 0.0f, 20.0f, 10.0f, 1.0f }; 
+const GLfloat light_position[] = { 0.0f, 120.0f, 30.0f, 1.0f }; 
 const GLfloat mat_ambient[] = { 0.7f, 0.7f, 0.7f, 1.0f }; 
 const GLfloat mat_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f }; 
 const GLfloat mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f }; 
 const GLfloat high_shininess[] = { 100.0f }; 
-void lighting(){ 
- // Fungsi mengaktifkan pencahayaan 
+
+//Membuat gambar menjadi tekstur kemudian berikan ID pada tekstur
+GLuint loadTexture(Image* image) {
+	GLuint textureId;
+	glGenTextures(1, &textureId);
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width, image->height, 
+	0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+	return textureId;
+}
+
+void initRender(){ 
+ // Fungsi mengaktifkan pencahayaan dan inisialisasi rendering
  glEnable(GL_DEPTH_TEST); 
+ glEnable(GL_TEXTURE_2D);
  glDepthFunc(GL_LESS); 
  glEnable(GL_LIGHT0); 
  glEnable(GL_NORMALIZE); 
@@ -1446,7 +1469,12 @@ void lighting(){
  glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient); 
  glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse); 
  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); 
- glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess); 
+ glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);  
+ 
+ Image* image = loadBMP("img/yae.bmp");
+ _textureId = loadTexture(image);
+ delete image;
+
 } 
 void init(void) 
 { 
@@ -1468,7 +1496,7 @@ int main(int argc, char **argv)
  glClearColor(0.619f, 0.886f, 1.0f, 0.0f);
  glutIdleFunc(display); // Fungsi display-nya dipanggil terusmenerus 
  glutReshapeFunc(Reshape); 
- lighting(); 
+ initRender(); 
  init(); 
  glutMainLoop(); 
  return(0); 
