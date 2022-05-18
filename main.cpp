@@ -1357,6 +1357,52 @@ void Awan(){
     glPopMatrix();
 }
 
+void drawBitmapText(char *str,float x,float y,float z)
+{
+	char *c;
+	glRasterPos3f(x,y+8,z);
+
+	for (c=str; *c != '\0'; c++)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, *c);
+	}
+}
+
+void drawStrokeText(char* str,int x,int y,int z)
+{
+	  char *c;
+	  glPushMatrix();
+	  glTranslatef(x, y+8,z);
+	  glScalef(0.002f,0.002f,z);
+
+	  for (c=str; *c != '\0'; c++)
+	  {
+    		glutStrokeCharacter(GLUT_STROKE_ROMAN , *c);
+	  }
+	  glPopMatrix();
+}
+
+void drawStrokeText2(char* str,int x,int y,int z)
+{
+	  char *c;
+	  glPushMatrix();
+	  glTranslatef(x, y+8,z);
+	  glScalef(0.005f,0.005f,z);
+
+	  for (c=str; *c != '\0'; c++)
+	  {
+    		glutStrokeCharacter(GLUT_STROKE_ROMAN , *c);
+	  }
+	  glPopMatrix();
+}
+void drawStrokeChar(char c,float x,float y,float z)
+{
+	  glPushMatrix();
+          glTranslatef(x, y+8,z);
+          glScalef(0.002f,0.002f,z);
+          glutStrokeCharacter(GLUT_STROKE_ROMAN , c);
+	  glPopMatrix();
+}
 
 void Home(){ // homescreen atau tampilan awal game
 	// masukan kode menunya disini
