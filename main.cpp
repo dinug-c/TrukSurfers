@@ -23,7 +23,7 @@ int deltaMove = 0,h,w;
 int bitmapHeight=12; 
 int screen = 1; // 1 = mainscreen, 2 = gamescreen, 3 = gameover
 GLuint _textureId;           //ID OpenGL untuk tekstur
-
+Gluint _textureId2;          // tekstur 2
 
 GLUquadricObj *quadObj; //parameter kuadratik silinder
 
@@ -1360,6 +1360,27 @@ void Awan(){
 
 void Home(){ // homescreen atau tampilan awal game
 	// masukan kode menunya disini
+	 glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, _textureId);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glColor3f(1.0f, 1.0f, 1.0f);
+		glBegin(GL_QUADS);
+		glNormal3f(0.0, 1.0f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex2f(-1.0f, -1.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex2f(1.0f, -1.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex2f(1.0f, 1.0f);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex2f(-1.0f, 1.0f);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+		//glutSwapBuffers();
+
+        drawStrokeText("Press G to Start",-1,-1,0);
+        drawStrokeText2("Truck Surfer",-2,0,0);
 }
 
 void GameOver(){
@@ -1474,7 +1495,10 @@ void initRender(){
  Image* image = loadBMP("img/yae.bmp");
  _textureId = loadTexture(image);
  delete image;
-
+	
+Image* image2 = loadBMP("img/start.bmp"); 
+_textureId2 = loadTexture(image2);
+delete image2;
 } 
 void init(void) 
 { 
