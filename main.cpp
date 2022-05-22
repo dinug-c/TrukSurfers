@@ -12,7 +12,7 @@ Made by	: 	1. Agung Surya Permana
 #include <stdio.h> 
 #include <string.h> 
 #include <stdlib.h> 
-#include "lib/imageloader.h"
+#include "imageloader.h"
 
 #define PHI 3.14159265358979323846 
 
@@ -20,9 +20,10 @@ float angle=0.0, deltaAngle = 0.0, ratio;
 float x=0.0f,y=1.75f,z=15.0f; // posisi awal kamera 
 float lx=0.0f,ly=0.0f,lz=-1.0f; 
 float zoom=4;
+float tX=0,tY=0,tZ=-8,rX=0,rY=0,rZ=4;
 float rotX=0,rotY=0,rotZ=0;
 float cosX=0,cosY=1,cosZ=0;
-float angle=0;
+//float angle=0;
 float xEye=0.0f,yEye=5.0f,zEye=30.0f;
 float cenX=0,cenY=0,cenZ=0,roll=0;
 float radius=0;
@@ -40,8 +41,7 @@ bool rot = false;
 int deltaMove = 0,h,w; 
 int bitmapHeight=12; 
 int screen = 1; // 1 = mainscreen, 2 = gamescreen, 3 = gameover
-GLuint _textureId;           //ID OpenGL untuk tekstur
-Gluint _textureId2;          // tekstur 2
+
 
 GLUquadricObj *quadObj; //parameter kuadratik silinder
 
