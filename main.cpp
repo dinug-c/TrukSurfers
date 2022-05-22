@@ -1533,12 +1533,12 @@ void keyboard(unsigned char key, int x, int y) {
 			rotX += rotfrac*3;
 			rotY += rotfrac/2;
 			break;
-		case 'p' :
+		case 'p' : // abalik ke home
 			START = false;
 			break;
-		case ' ':
+		/*case ' ':
 			START = true;
-			break;
+			break;*/
 			
 	}
 	glutPostRedisplay();	
