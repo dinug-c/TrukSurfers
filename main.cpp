@@ -19,6 +19,22 @@ Made by	: 	1. Agung Surya Permana
 float angle=0.0, deltaAngle = 0.0, ratio; 
 float x=0.0f,y=1.75f,z=15.0f; // posisi awal kamera 
 float lx=0.0f,ly=0.0f,lz=-1.0f; 
+float zoom=4;
+float rotX=0,rotY=0,rotZ=0;
+float cosX=0,cosY=1,cosZ=0;
+float angle=0;
+float xEye=0.0f,yEye=5.0f,zEye=30.0f;
+float cenX=0,cenY=0,cenZ=0,roll=0;
+float radius=0;
+float theta=0,slope=0;
+float speed = 0.3;
+float angleBackFrac = 0.2;
+float r[] = {0.1,0.4,0.0,0.9,0.2,0.5,0.0,0.7,0.5,0.0};
+float g[] = {0.2,0.0,0.4,0.5,0.2,0.0,0.3,0.9,0.0,0.2};
+float b[] = {0.4,0.5,0.0,0.7,0.9,0.0,0.1,0.2,0.5,0.0};
+int TIME=0;
+bool START = false;
+bool rot = false;
 int deltaMove = 0,h,w; 
 int bitmapHeight=12; 
 int screen = 1; // 1 = mainscreen, 2 = gamescreen, 3 = gameover
@@ -1398,31 +1414,34 @@ void drawStrokeText2(char* str,int x,int y,int z)
 void drawStrokeChar(char c,float x,float y,float z)
 {
 	  glPushMatrix();
-          glTranslatef(x, y+8,z);
-          glScalef(0.002f,0.002f,z);
-          glutStrokeCharacter(GLUT_STROKE_ROMAN , c);
+          	glTranslatef(x, y+8,z);
+          	glScalef(0.002f,0.002f,z);
+          	glutStrokeCharacter(GLUT_STROKE_ROMAN , c);
 	  glPopMatrix();
 }
 
 void Home(){ // homescreen atau tampilan awal game
 	// masukan kode menunya disini
-	 glEnable(GL_TEXTURE_2D);
-	 glBindTexture(GL_TEXTURE_2D, _textureId2);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, _textureId2);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glBegin(GL_QUADS);
-	glNormal3f(0.0, 1.0f, 0.0f);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex2f(-1.0f, -1.0f);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex2f(1.0f, -1.0f);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex2f(1.0f, 1.0f);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex2f(-1.0f, 1.0f);
+		glNormal3f(0.0, 1.0f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex2f(-1.0f, -1.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex2f(1.0f, -1.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex2f(1.0f, 1.0f);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex2f(-1.0f, 1.0f);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
+	
+	drawStrokeText("Press SPACE to Start",-1,-1,0);
+        drawStrokeText2("Truck Surfers",-2,0,0);
 	//glutSwapBuffers();
 }
 
@@ -1434,15 +1453,15 @@ void GameOver(){
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glBegin(GL_QUADS);
-	glNormal3f(0.0, 1.0f, 0.0f);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex2f(-1.0f, -1.0f);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex2f(1.0f, -1.0f);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex2f(1.0f, 1.0f);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex2f(-1.0f, 1.0f);
+		glNormal3f(0.0, 1.0f, 0.0f);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex2f(-1.0f, -1.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex2f(1.0f, -1.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex2f(1.0f, 1.0f);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex2f(-1.0f, 1.0f);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 	//glutSwapBuffers();
@@ -1498,7 +1517,7 @@ void keyboard(unsigned char key, int x, int y) {
 				break;
 		}
 	} else { // fungsi keyboard ketika berada di gamescreen
-		float frac = 0.3;
+	float frac = 0.3;
 	float rotfrac = 1;
 	switch(key)
 	{
