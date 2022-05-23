@@ -2256,12 +2256,23 @@ void display() {
  } 
  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
  if(screen == 2) { // screen 2 = gamescreen
-  		glPushMatrix();
+  	glPushMatrix();
             glTranslated(0,0,0);
             glScaled(zoom,zoom,zoom);
             glRotated(a,0,1,0);
             draw();
         glPopMatrix();
+	
+	glPushMatrix();
+	 glTranslatef(0,9,-2);
+	 glRotated(60,1,0,0);
+	 glColorf(1,0.5,0);
+	 glScalef(25,0.001,1.5);
+	 glutSolidCube(1);
+	glPopMatrix();
+	
+	drawStrokeText("LEFT : A,RIGHT : D",-8,0.9,0);
+	
         drawStrokeText("TIME : ",3,0,0);
         int mod,number=0;
         while(TIME){
