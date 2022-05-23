@@ -2413,7 +2413,7 @@ int main(int argc, char **argv)
  glutInitWindowPosition(100,100); 
  glutInitWindowSize(640,480); 
  glutCreateWindow("Truk Surfers"); 
- PlaySound("music/bgm.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
+ //PlaySound("music/bgm.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP); // Filenya gamuat wokwowok
  glutIgnoreKeyRepeat(1); // Mengabaikan key repeat (saat tombol ditekan terus menerus)
  glutSpecialFunc(pressKey);
  glutSpecialUpFunc(releaseKey); 
