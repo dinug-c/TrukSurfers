@@ -1,9 +1,10 @@
 /*
 Truk Surfers Project
-Made by	: 	1. Agung Surya Permana
-			2. Muhamad Aditya Yusuf Jatikusumo
-			3. Resma Adi Nugroho
-			4. Ririn Indah Cahyani
+GKV B1
+Created By	: 	1. Agung Surya Permana				(24060121140167)			
+				2. Muhamad Aditya Yusuf Jatikusumo	(24060121140157)	
+				3. Resma Adi Nugroho				(24060121120021)
+				4. Ririn Indah Cahyani				(24060121130069)
 */
 #include <iostream> 
 #include <math.h> 
@@ -17,13 +18,13 @@ Made by	: 	1. Agung Surya Permana
 #define EN_SIZE 20
 #define PHI 3.14159265358979323846 
 
+int year = 0, day = 0;
 float angle=0.0, deltaAngle = 0.0, ratio; 
 float x=0.0f,y=20.75f,z=80.0f; // posisi awal kamera 
 float tX=0,tY=0,tZ=-8,rX=0,rY=0,rZ=4;
 float tZ1=-20,tZ2=-40,tZ3=-60,tZ4=-80,tZ5=-100,tZ6=-120;
 float lx=0.0f,ly=0.0f,lz=-1.0f; 
 float zoom=4;
-char skor2[100];
 float rotX=0,rotY=0,rotZ=0;
 float cosX=0,cosY=1,cosZ=0;
 float xEye=0.0f,yEye=5.0f,zEye=30.0f;
@@ -44,8 +45,7 @@ bool rot = false;
 int deltaMove = 0,h,w; 
 int bitmapHeight=12; 
 int screen = 1; // 1 = mainscreen, 2 = gamescreen, 3 = gameover
-GLuint _textureId, _textureId2, _textureId3;          // tekstur 2
-;           //ID OpenGL untuk tekstur
+GLuint _textureId, _textureId2, _textureId3, _textureId4;   // ID OpenGL untuk tekstur
 
 GLUquadricObj *quadObj; //parameter kuadratik silinder
 
@@ -87,12 +87,30 @@ void moveMeFlat(int i)
  x + lx,y + ly,z + lz, 
  0.0f,1.0f,0.0f); 
 } 
+void matahari()
+{
+     glClear (GL_COLOR_BUFFER_BIT);
+     glColor3f (1.0, 1.0, 0.0);
+     glPushMatrix();
+     glutWireSphere(1.0, 40, 16); /* gambar matahari */
+     glRotatef ((GLfloat) year, 0.0, 1.0, 0.0);
+     glTranslatef (2.0, 0.0, 0.0);
+     glRotatef ((GLfloat) day, 0.0, 1.0, 0.0);
+    
+     glColor3f (1.0, 0.4, 0.3);
+     glutWireSphere(0.2, 50, 20); /* gambar planet kecil */
+    
+        glRotated(80.5,9,6,0);
+        glutWireTorus(0.3,0.4,1,30);
+    glPopMatrix();
 
-void Batu(){
-	
+}
+void Batu(int x, int z){
+	glPushMatrix();
+	glTranslated(x,1.5,z);
 	glColor3f(0.3,0.3,0.3);
 	glutSolidSphere(1.8,100,100);
-	
+	glPopMatrix();
 } 
 
 void Pembatas(void){
@@ -137,32 +155,34 @@ void Pembatas(void){
 	glPopMatrix();
 	
 } 
-void gerbangTol(int x ,float z){
+void gerbangTol(int pos, int x ,float z){
 	glPushMatrix();
 		glScaled(5.0,5.0,5.0);
 	    glPushMatrix();
 	        // Tol
-	        glColor3d(1,1,0);
+	        glColor3d(0.7,0.7,0.7);
 	        glTranslated(cubePosX[x],1.5,z);
 	        glScaled(0.5,4,0.5);
 	        glutSolidCube(1);
 	
-	        glColor3d(1,0,0);
+	        glColor3d(0.7,0.3,0.0);
 	        glTranslated(2.5,0.45,0);
 	        glScaled(5,0.15,1.1);
 	        glutSolidCube(1);
 	    glPopMatrix();
 	glPopMatrix();
-
-    //Fungsi mendeteksi poin
-    if(cubePosX[x]+tX > -0.2 && cubePosX[x]+tX < 2.2){
-        if(z > 0 && z < 1){
-            skor += 10;
-        }
-    }
-    z += speed;
-    if(z > 20){
-        z -= 110;
+	
+	// fungsi hitbox
+    if(pos == 1){
+    	if(tX>3.5 && tX<10 && tZ>z-2 && tZ<z+2){
+	        skor += 10;
+	        speed += 0.002;
+    	}
+    } else {
+    	if(tX>-10 && tX<-3.5 && tZ>z-2 && tZ<z+2){
+	        skor += 10;
+	        speed += 0.002;
+    	}
     }
 }
 
@@ -2044,7 +2064,25 @@ void Truk()
 		glutSolidTorus(0.4, 0.5, 100, 100);
 	glPopMatrix();
 }
-
+void bgScreen(){
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, _textureId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glScaled(40.0,40.0,0.0);
+	glTranslated(0.0,0.5,0.0);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex2f(-1.4f, -1.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex2f(1.4f, -1.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex2f(1.4f, 1.0f);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex2f(-1.4f, 1.0f);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+}
 void transEnvi(){
     /// Ground
     glColor3d(0,0.5,0.1);
@@ -2061,7 +2099,17 @@ void draw(){
     double a = t*90.0;
 
     TIME = t;
-
+    
+    glPushMatrix();
+    	glTranslated(-5.0,15.0,-15.0);
+    	matahari();
+    glPopMatrix();
+    
+    glPushMatrix();
+    	glTranslated(0.0,0.0,-80.0);
+    	bgScreen();
+    glPopMatrix();
+    
     ///Plane
     if(rotX>11)rotX=11;
     if(rotX<-11)rotX=-11;
@@ -2093,14 +2141,11 @@ void draw(){
         Awan();
     glPopMatrix();
     
-    glPushMatrix();
-    	glTranslated(tX,tY,tZ);
-    	gerbangTol(1,4.0);
-    glPopMatrix();
-    
 	glPushMatrix();
         glTranslated(tX,tY,tZ);
         environment(2);
+        gerbangTol(1,1,4.0);
+        Batu(1,4);
     glPopMatrix();
 
     glPushMatrix();
@@ -2111,6 +2156,8 @@ void draw(){
     glPushMatrix();
         glTranslated(tX,tY,tZ2);
         environment(3);
+        glRotated(-180,0,1,0);
+        gerbangTol(2,1,4.0);
     glPopMatrix();
 
     glPushMatrix();
@@ -2233,36 +2280,54 @@ void Home(){ // homescreen atau tampilan awal game
 	glEnd();
 	glPopMatrix();
 	glDisable(GL_TEXTURE_2D);
-	
-
-	//glutSwapBuffers();
 }
 
 void GameOver(){
-	// masukan kode game overnya disini
 	glEnable(GL_TEXTURE_2D);
+	glPushMatrix();
+	drawStrokeText("Press SPACE to Play Again",-45,-10,2);
+    glPopMatrix();
 	glBindTexture(GL_TEXTURE_2D, _textureId3);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glScaled(50.0,50.0,0.0);
+	glTranslated(0.0,0.5,0.0);
 	glBegin(GL_QUADS);
-		glNormal3f(0.0, 1.0f, 0.0f);
 		glTexCoord2f(0.0f, 0.0f);
-		glVertex2f(-1.0f, -1.0f);
+		glVertex2f(-1.4f, -1.0f);
 		glTexCoord2f(1.0f, 0.0f);
-		glVertex2f(1.0f, -1.0f);
+		glVertex2f(1.4f, -1.0f);
 		glTexCoord2f(1.0f, 1.0f);
-		glVertex2f(1.0f, 1.0f);
+		glVertex2f(1.4f, 1.0f);
 		glTexCoord2f(0.0f, 1.0f);
-		glVertex2f(-1.0f, 1.0f);
+		glVertex2f(-1.4f, 1.0f);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
-	//glutSwapBuffers();
-
 }
 
+
+
 void Mwhehe(){ ///sssht this is restricted area! DEV ONLY!
-	
+	glEnable(GL_TEXTURE_2D);
+	glPushMatrix();
+	drawStrokeText("SORRY :) HOPE YOU ENJOY THIS GAME",-45,-10,2);
+    glPopMatrix();
+	glBindTexture(GL_TEXTURE_2D, _textureId4);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glScaled(20.0,20.0,0.0);
+	glTranslated(0.0,0.5,0.0);
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex2f(-1.4f, -1.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex2f(1.4f, -1.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex2f(1.4f, 1.0f);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex2f(-1.4f, 1.0f);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
 }
 
 void display() { 
@@ -2273,49 +2338,41 @@ void display() {
     if(!rot){
         a=0;
     }
-
- // Kalau move dan angle tidak nol, gerakkan kamera... 
- if (deltaMove) 
- moveMeFlat(deltaMove); 
- if (deltaAngle) { 
- angle += deltaAngle; 
- orientMe(angle); 
- } 
- glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
- if(screen == 2) { // screen 2 = gamescreen
-  		glPushMatrix();
-            glTranslated(0,0,0);
-            glScaled(zoom,zoom,zoom);
-            glRotated(a,0,1,0);
-            draw();
-        glPopMatrix();
-        
-        glColor3f(0.6f,0.3f,0.1f);
-        drawBitmapText("LEFT : A,RIGHT : D",-40,40,0);
-	  
-        drawBitmapText("TIME : ",20,40,0);
-        int mod,number=0;
-        while(TIME){
-            mod=TIME%10;
-            number=number*10+mod;
-            TIME/=10;
-        }
-        drawBitmapText("SKOR : ",20,35,0);
- 		float tmp=0;
-        while(number){
-            mod=number%10;
-            drawStrokeChar(mod+48,4+tmp,0,0);
-            number/=10;
-            tmp+=0.2;
-        }
- } else if (screen == 1) { // screen 1 = homescreen
- 	Home();
- } else { // screen 3 = gameover
- 	GameOver();
- }
- 
- glutSwapBuffers(); 
- glFlush(); 
+    
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+	if(screen == 2) { // screen 2 = gamescreen
+	 		char timer2[100];
+	        char skor2[100];
+	  		glPushMatrix();
+	            glTranslated(0,0,0);
+	            glScaled(zoom,zoom,zoom);
+	            glRotated(a,0,1,0);
+	            draw();
+	        glPopMatrix();
+	        
+	        glColor3f(1.0f,1.0f,1.0f);
+	        drawBitmapText("LEFT : A,RIGHT : D",-40,40,0);
+	        drawBitmapText("TIMER : ",20,40,0);
+	        sprintf(timer2,"%d sec",TIME);
+	        drawBitmapText(timer2,30,40,0);
+	        drawBitmapText("SKOR : ",20,35,0);
+	        sprintf(skor2,"%d",skor);
+	        drawBitmapText(skor2,30,35,0);
+	        
+	        if(skor >= 10000){
+	        	screen = 4;
+	        }
+	 		
+	} else if (screen == 1) { // screen 1 = homescreen
+	 	Home();
+	} else if (screen == 3){ // screen 3 = gameover
+	 	GameOver(); 
+	} else { // screen == 4 its dinner time :)
+		Mwhehe();
+	}
+	 
+	glutSwapBuffers(); 
+	glFlush(); 
 } 
 
 static void idle(void)
@@ -2344,7 +2401,7 @@ void keyboard(unsigned char key, int x, int y) {
 				screen = 2;
 				break;
 		}
-	} else { // fungsi keyboard ketika berada di gamescreen
+	} else if(screen == 2){ // fungsi keyboard ketika berada di gamescreen
 	switch(key)
 	{
 		
@@ -2360,6 +2417,14 @@ void keyboard(unsigned char key, int x, int y) {
 	}
 	glutPostRedisplay();	
 	
+	} else {
+		switch(key){
+			case ' ': // tekan spacebar untuk memulai ulang
+				screen = 2;
+				TIME = 0;
+				skor = 0;
+				break;
+		}
 	}
 }
 void releaseKey(int key, int x, int y) { 
@@ -2421,7 +2486,7 @@ void initRender(){
  glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular); 
  glMaterialfv(GL_FRONT, GL_SHININESS, high_shininess);  
  
- Image* image = loadBMP("img/yae.bmp");
+ Image* image = loadBMP("img/bg.bmp");
  _textureId = loadTexture(image);
  delete image;
 	
@@ -2431,6 +2496,10 @@ delete image2;
 
 Image* image3= loadBMP("img/over.bmp");
 _textureId3= loadTexture(image3);
+delete image3;
+
+Image* image4= loadBMP("img/yae.bmp");
+_textureId4= loadTexture(image4);
 delete image3;
 	
 } 
@@ -2447,7 +2516,7 @@ int main(int argc, char **argv)
  glutInitWindowSize(640,480); 
  glutCreateWindow("Truk Surfers"); 
  PlaySound("music/bgm.wav", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP);
- glutIgnoreKeyRepeat(1); // Mengabaikan key repeat (saat tombol ditekan terus menerus)
+ //glutIgnoreKeyRepeat(1); // Mengabaikan key repeat (saat tombol ditekan terus menerus)
  glutSpecialFunc(pressKey);
  glutSpecialUpFunc(releaseKey); 
  glutKeyboardFunc(keyboard);
