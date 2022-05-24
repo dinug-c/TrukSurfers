@@ -1,3 +1,4 @@
+ int year = 0, day = 0;
 void matahari()
 {
     glClear (GL_COLOR_BUFFER_BIT);
